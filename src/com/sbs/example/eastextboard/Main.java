@@ -24,7 +24,7 @@ public class Main {
 
 			String command = scanner.nextLine();
 
-			if (command.equals("article upload")) {
+			if (command.equals("article add")) {
 				System.out.printf("타이틀 : ");
 				String title = scanner.nextLine();
 
@@ -55,18 +55,34 @@ public class Main {
 					System.out.println("게시물이 없습니다");
 				} else {
 					if( pre_id >= 1) {
-						System.out.printf("%d / %s\n / %s",article1_id,article1_title,article1_body);
+						System.out.printf("%d / %s  %s \n",article1_id,article1_title,article1_body);
 					}
 					if( pre_id >= 2) {
-						System.out.printf("%d / %s\n / %s ",article2_id,article2_title,article2_body);
+						System.out.printf("%d / %s / %s \n ",article2_id,article2_title,article2_body);
 					}
 				}
-			} else if (command.equals("exit")) {
+			}
+			else if (command.equals("article detail 1")) {
+				System.out.println("== 게시물 상세 ==");
+				System.out.printf("번호 :  %s\n",article1_id);
+				System.out.printf("제목 :  %s\n",article1_title);
+				System.out.printf("내용 :  %s\n",article1_body);
+			}
+				else if (command.equals("article detail 2")) {
+					System.out.println("== 게시물 상세 ==");
+					System.out.printf("번호 :  %s\n",article2_id);
+					System.out.printf("제목 :  %s\n",article2_title);
+					System.out.printf("내용 :  %s\n",article2_body);
+			
+			}
+				
+			else if (command.equals("exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 			}
 		}
+	
 		scanner.close();
-
+	
 	}
 }
