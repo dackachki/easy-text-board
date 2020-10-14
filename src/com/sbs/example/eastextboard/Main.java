@@ -7,82 +7,58 @@ public class Main {
 
 		Scanner scanner = new Scanner(System.in);
 
+		Article[] art = new Article[10];
+		art[0] = new Article();
+		art[1] = new Article();
+		art[2] = new Article();
+		art[3] = new Article();
+		art[4] = new Article();
+		art[5] = new Article();
+		art[6] = new Article();
+		art[7] = new Article();
+		art[8] = new Article();
+		art[9] = new Article();
+
+		int i = 0;
 		int id = 1;
-		int pre_id = 0;
-
-		int article1_id = 0;
-		String article1_title = "";
-		String article1_body = "";
-
-		int article2_id = 0;
-		String article2_title = "";
-		String article2_body = "";
-
 		while (true) {
+			art[i] = new Article();
 
 			System.out.printf("명령어 :");
 
 			String command = scanner.nextLine();
 
 			if (command.equals("article add")) {
+
 				System.out.printf("타이틀 : ");
 				String title = scanner.nextLine();
-
+				art[i].title = title;
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
-
-				System.out.println("== 게시물 정보 == ");
-				System.out.println("번호 : " + id);
-				System.out.println("제목 : " + title);
-				System.out.println("내용 : " + body);
-
-				if (id == 1) {
-					 article1_id = id;
-					 article1_title = title;
-					 article1_body = body;
-				}
-
-				else if (id == 2) {
-					 article2_id = id;
-					 article2_title = title;
-					 article2_body = body;
-				}
+				art[i].body = body;
+				art[i].id = id;
+				System.out.println("== 게시물이 생성됨 ==");
+				System.out.printf("%d번", art[i].id);
+				System.out.printf("제목 : %s\n", art[i].title);
+				System.out.printf("내용 : %s\n", art[i].body);
+				i++;
 				id++;
-				pre_id++;
-
 			} else if (command.equals("article list")) {
-				if (pre_id == 0) {
-					System.out.println("게시물이 없습니다");
-				} else {
-					if( pre_id >= 1) {
-						System.out.printf("%d / %s  %s \n",article1_id,article1_title,article1_body);
-					}
-					if( pre_id >= 2) {
-						System.out.printf("%d / %s / %s \n ",article2_id,article2_title,article2_body);
-					}
+				for (int j = 0; j < art.length; j++) {
+					System.out.println("Index / Title / Body");
+					System.out.printf("%d번", art[j].id);
+					System.out.printf("     %s", art[j].title);
+					System.out.printf("       %s\n", art[j].body);
 				}
-			}
-			else if (command.equals("article detail 1")) {
-				System.out.println("== 게시물 상세 ==");
-				System.out.printf("번호 :  %s\n",article1_id);
-				System.out.printf("제목 :  %s\n",article1_title);
-				System.out.printf("내용 :  %s\n",article1_body);
-			}
-				else if (command.equals("article detail 2")) {
-					System.out.println("== 게시물 상세 ==");
-					System.out.printf("번호 :  %s\n",article2_id);
-					System.out.printf("제목 :  %s\n",article2_title);
-					System.out.printf("내용 :  %s\n",article2_body);
-			
-			}
-				
-			else if (command.equals("exit")) {
-				System.out.println("== 프로그램 종료 ==");
+			} else if (command.equals("exit")) {
 				break;
+			} else {
+				System.out.println("잘못된 명령어 입니다.");
 			}
+
 		}
-	
 		scanner.close();
-	
+
 	}
+
 }
