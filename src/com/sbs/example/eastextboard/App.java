@@ -3,22 +3,15 @@ package com.sbs.example.eastextboard;
 import java.util.Scanner;
 
 public class App {
+	
 
 	public void run() {
 		Scanner scanner = new Scanner(System.in);
 
 		Article[] art = new Article[11];
-		art[0] = new Article();
-		art[1] = new Article();
-		art[2] = new Article();
-		art[3] = new Article();
-		art[4] = new Article();
-		art[5] = new Article();
-		art[6] = new Article();
-		art[7] = new Article();
-		art[8] = new Article();
-		art[9] = new Article();
-		art[10] = new Article();
+		for (int num = 0; num < art.length; num++) {
+			art[num] = new Article();
+		}
 		int i = 1;
 		int MaxArticleCount = 11;
 
@@ -55,9 +48,13 @@ public class App {
 			} else if (command.startsWith("article detail")) {
 				String[] commandbits = command.split(" ");
 				int defid = Integer.parseInt(commandbits[2]);
+
 				if (defid <= 0 || art[defid].id == 0) {
+					System.out.println("==게시글 정보 ==");
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", defid);
 					continue;
+				} else if (defid > 10) {
+					System.out.println("게시물 범위 초과");
 				}
 				System.out.println("==게시글 정보 ==");
 				System.out.printf("게시물 번호 : %d\n게시물 제목: %s\n 게시물 내용: %s\n", art[defid].id, art[defid].title,
