@@ -1,7 +1,7 @@
 package com.sbs.example.eastextboard;
 
 public class Article {
-	public int id =0;
+	public int id;
 	public String title ="";
 	public String body = "";
 
