@@ -3,17 +3,51 @@ package com.sbs.example.eastextboard;
 import java.util.Scanner;
 
 public class App {
-	
+	Article[] art = new Article[10];
+	int MaxArticleCount = art.length;
+	int artC = 1;
+	int i = 1;
+
+	public int getIndexN(int numb) {
+		for (int i = 1; i < art.length; i++) {
+			if (numb == art[i].id) {
+				return art[i].id;
+			}
+		}
+		return -1;
+
+	}
+
+	public void eraseByIndex(int IndexNum) {
+		int Index = getIndexN(IndexNum);
+		if (Index != -1) {
+			remove(Index);
+		}
+		else {
+			System.out.printf("%d번 게시물이 없습니다.\n",IndexNum);
+		}
+
+	}
+
+	public void remove(int ind) {
+		System.out.printf("== %d번 좌석 숫자 제거 ==\n", ind);
+
+		for (int i = ind; i < MaxArticleCount - 1; i++) {
+			art[ind] = art[ind + 1];
+
+		}
+		artC--;
+		i--;
+
+
+	}
 
 	public void run() {
 		Scanner scanner = new Scanner(System.in);
 
-		Article[] art = new Article[11];
-		for (int num = 0; num < art.length; num++) {
+		for (int num = 1; num < art.length; num++) {
 			art[num] = new Article();
 		}
-		int i = 1;
-		int MaxArticleCount = 11;
 
 		while (true) {
 			System.out.printf("명령어 입력 : ");
@@ -34,12 +68,13 @@ public class App {
 					System.out.printf("게시물 제목 : %s\n", art[i].title);
 					System.out.printf("게시물 내용 : %s\n", art[i].body);
 					i++;
+					artC++;
 				}
 
 			} else if (command.equals("article list")) {
 				System.out.println("== 전체 게시물 리스트 ==");
 				System.out.println("번호 / 제목");
-				for (int j = 1; j <= i - 1; j++) {
+				for (int j = 1; j <= artC -1 ; j++) {
 
 					System.out.printf("%d /%s\n", art[j].id, art[j].title);
 
@@ -63,6 +98,36 @@ public class App {
 			} else if (command.equals("exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
+			}
+
+			else if (command.startsWith("article delete")) {
+				String[] commandbits = command.split(" ");
+				int defid = Integer.parseInt(commandbits[2]);
+				if (defid < 0) {
+
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", defid);
+
+				}
+
+				int len = art.length;
+				for (int DIndex = defid; DIndex < len - 1; DIndex++) {
+
+					art[DIndex] = art[DIndex + 1];
+
+				}
+				System.out.printf("%d번쨰 게시물이 삭제 되었습니다.\n", defid);
+				artC--;
+				i--;
+				
+
+			} else if (command.startsWith("article erase")) {
+				String[] commandbits = command.split(" ");
+				int defid = Integer.parseInt(commandbits[2]);
+				eraseByIndex(defid);
+				
+			} else if (command.equals("index num")) {
+				System.out.printf("Count :%d\n",artC);
+				System.out.printf("배열순서 : %d\n",i);
 			} else {
 				System.out.println("명령어가 잘못 입력되었습니다.");
 			}
