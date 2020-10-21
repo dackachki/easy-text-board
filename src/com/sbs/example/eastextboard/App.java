@@ -1,137 +1,157 @@
 package com.sbs.example.eastextboard;
 
+
 import java.util.Scanner;
 
 public class App {
-	Article[] art = new Article[10];
-	int MaxArticleCount = art.length;
-	int artC = 1;
-	int i = 1;
+	Article[] articles = new Article[3];
+	int lastArticleId = 0;
+	int articlesSize = 0;
 
-	public int getIndexN(int numb) {
-		for (int i = 1; i < art.length; i++) {
-			if (numb == art[i].id) {
-				return art[i].id;
-			}
-		}
-		return -1;
-
+	int articlesSize() {
+		return articlesSize;
 	}
 
-	public void eraseByIndex(int IndexNum) {
-		int Index = getIndexN(IndexNum);
-		if (Index != -1) {
-			remove(Index);
-		} else {
-			System.out.printf("%d번 게시물이 없습니다.\n", IndexNum);
+	Article getArticle(int id) {
+		int index = getIndexById(id);
+		
+		if ( index == -1 ) {
+			return null;
 		}
-
-	}
-
-	public void remove(int indexNum) {
-		System.out.printf("== %d번 좌석 숫자 제거 ==\n", indexNum);
-
-		for (int i = indexNum; i < MaxArticleCount - 1; i++) {
-			art[i ] = art[i + 1];
-
-		}
-		artC--;
-
+		
+		return articles[index];
 	}
 
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 
-		for (int num = 0; num < art.length; num++) {
-			art[num] = new Article();
-		}
+		int maxArticlesCount = articles.length;
 
 		while (true) {
-			System.out.printf("명령어 입력 : ");
-			String command = scanner.nextLine();
 
-			if (command.equals("article add")) {
-				if (i == MaxArticleCount) {
-					System.out.println("== 게시물을 더 이상 등록 할 수 없습니다. ==");
+			System.out.printf("명령어 : ");
+			String command = sc.nextLine();
 
-				} else {
-					System.out.printf("제목 : ");
-					art[artC].title = scanner.nextLine();
-					System.out.printf("내용 : ");
-					art[artC].body = scanner.nextLine();
-					art[artC].id = artC;
-					System.out.println("== 생성된 게시물 정보 ==");
-					System.out.printf("게시물 번호 : %d\n", art[artC].id);
-					System.out.printf("게시물 제목 : %s\n", art[artC].title);
-					System.out.printf("게시물 내용 : %s\n", art[artC].body);
-					
-					artC++;
-				}
-
-			} else if (command.equals("article list")) {
-				System.out.println("== 전체 게시물 리스트 ==");
-				System.out.println("번호 / 제목");
-				for (int j = 1; j <= artC - 1; j++) {
-
-					System.out.printf("%d /%s\n", art[j].id, art[j].title);
-
-				}
-
-			} else if (command.startsWith("article detail")) {
-				String[] commandbits = command.split(" ");
-				int defid = Integer.parseInt(commandbits[2]);
-
-				if (defid <= 0 || art[defid].id == 0) {
-					System.out.println("==게시글 정보 ==");
-					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", defid);
-					continue;
-				} else if (defid > 10) {
-					System.out.println("게시물 범위 초과");
-				}
-				System.out.println("==게시글 정보 ==");
-				System.out.printf("게시물 번호 : %d\n게시물 제목: %s\n 게시물 내용: %s\n", art[defid].id, art[defid].title,
-						art[defid].body);
-
-			} else if (command.equals("exit")) {
+			if (command.equals("system exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
-			}
+			} else if (command.equals("article add")) {
+				System.out.println("== 게시물 등록 ==");
 
-			else if (command.startsWith("article delete")) {
-				String[] commandbits = command.split(" ");
-				int defid = Integer.parseInt(commandbits[2]);
-				if (defid < 0) {
-
-					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", defid);
-
+				if (articlesSize() >= maxArticlesCount) {
+					System.out.println("더 이상 생성할 수 없습니다.");
+					continue;
 				}
 
-				int len = art.length;
-				for (int DIndex = defid; DIndex < len - 1; DIndex++) {
+				int id = lastArticleId + 1;
+				String title;
+				String body;
 
-					art[DIndex] = art[DIndex + 1];
+				lastArticleId = id;
 
+				System.out.printf("제목 : ");
+				title = sc.nextLine();
+				System.out.printf("내용 : ");
+				body = sc.nextLine();
+
+				Article article = new Article();
+
+				article.id = id;
+				article.title = title;
+				article.body = body;
+
+				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
+
+				articles[articlesSize] = article;
+
+				articlesSize++;
+			} else if (command.equals("article list")) {
+				System.out.println("== 게시물 리스트 ==");
+
+				if (articlesSize() == 0) {
+					System.out.println("게시물이 존재하지 않습니다.");
+					continue;
 				}
-				System.out.printf("%d번쨰 게시물이 삭제 되었습니다.\n", defid);
-				artC--;
-				i--;
 
-			} else if (command.startsWith("article erase")) {
-				String[] commandbits = command.split(" ");
-				int defid = Integer.parseInt(commandbits[2]);
-				eraseByIndex(defid);
+				System.out.println("번호 / 제목");
 
-			} else if (command.equals("index num")) {
-				System.out.printf("Count :%d\n", artC);
+				for (int i = 0; i < articlesSize(); i++) {
+					Article article = articles[i];
+
+					System.out.printf("%d / %s / %s\n", article.id, article.title,article.body);
+				}
+			} else if (command.startsWith("article detail ")) {
+				int inputedId = Integer.parseInt(command.split(" ")[2]);
+				System.out.println("== 게시물 상세 ==");
+
+				Article article = getArticle(inputedId);
+
+				if (article == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", inputedId);
+					continue;
+				}
+
+				System.out.printf("번호 : %d\n", article.id);
+				System.out.printf("제목 : %s\n", article.title);
+				System.out.printf("내용 : %s\n", article.body);
+			} else if (command.startsWith("article delete ")) {
+				int inputedId = Integer.parseInt(command.split(" ")[2]);
+				System.out.println("== 게시물 삭제 ==");
+
+				Article article = getArticle(inputedId);
 				
-			} else {
-				System.out.println("명령어가 잘못 입력되었습니다.");
-			}
+				if (article == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", inputedId);
+					continue;
+				}
 
+				remove(inputedId);
+
+				System.out.printf("%d번 게시물이 삭제되었습니다.\n", inputedId);
+			}
+			else if(command.startsWith("article modify")) {
+				int inputedId = Integer.parseInt(command.split(" ")[2]);
+				String PreT = "";
+				String PreB = "";
+				
+				System.out.println("수정할 제목 : ");
+				String ChangedT = sc.nextLine();
+				System.out.println("수정할 내용 : ");
+				String ChangedB = sc.nextLine();
+				getArticle(inputedId).title = ChangedT;
+				getArticle(inputedId).body = ChangedB;
+				System.out.printf("제목 %s 가/이 %s로 변경되었습니다.\n",PreT,ChangedT);
+				System.out.printf("내용 %s 가/이 %s로 변경되었습니다.\n",PreB,ChangedB);
+			}
+			else if (command.startsWith("article search")) {
+				String LookingF=(command.split(" ")[2]);
+			}
 		}
 
-		scanner.close();
-
+		sc.close();
 	}
 
+	private void remove(int id) {
+		int index = getIndexById(id);
+
+		if (index == -1) {
+			return;
+		}
+
+		for (int i = index + 1; i < articlesSize(); i++) {
+			articles[i - 1] = articles[i];
+		}
+
+		articlesSize--;
+	}
+
+	private int getIndexById(int id) {
+		for (int i = 0; i < articlesSize(); i++) {
+			if (articles[i].id == id) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
 }
