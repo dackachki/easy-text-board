@@ -4,10 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class App {
-	private Article[] articles = new Article[2];
+	private Article[] articles = new Article[32];
 	private int lastArticleId = 0;
 	private int articlesSize = 0;
 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 	private int articlesSize() {
 		return articlesSize;
 	}
@@ -31,7 +32,6 @@ public class App {
 		// 새 업체과 계약한다.
 
 		if (isArticlesFull()) {
-			System.out.printf("== 배열 사이즈 증가(%d => %d) ==\n", articles.length, articles.length * 2);
 
 			Article[] newArticles = new Article[articles.length * 2];
 
@@ -94,39 +94,33 @@ public class App {
 
 			System.out.printf("명령어) ");
 			String command = sc.nextLine();
-
+			for (int i = 1; i <= articles.length; i++) {
+				add("title" + i, "body" + i);
+			}
 			if (command.equals("system exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
-			} else if (command.equals("article add")) {
-				System.out.println("== 게시물 등록 ==");
 
-				String title;
-				String body;
+			} else if (command.startsWith("article list")) {
+				int pagenum = Integer.parseInt(command.split(" ")[2]);
 
-				System.out.printf("제목 : ");
-				title = sc.nextLine();
-				System.out.printf("내용 : ");
-				body = sc.nextLine();
-
-				int id = add(title, body);
-
-				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
-			} else if (command.equals("article list")) {
-				System.out.println("== 게시물 리스트 ==");
-
+				System.out.printf("== 게시물 %d 리스트 ==\n", pagenum);
+				System.out.println("번호 / 제목 / 날짜");
 				if (articlesSize() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
-
-				System.out.println("번호 / 제목 / 날짜");
-
-				for (int i = articlesSize() - 1; i >= 0; i--) {
+				int itemsInPage =10;
+				int StartNum = articles.length -1;
+				StartNum -= (pagenum-1) *itemsInPage;
+				int EndNum =StartNum - itemsInPage;
+				
+				for(int i = StartNum; i >=EndNum+1; i--) {
 					Article article = articles[i];
-
-					System.out.printf("%d / %s / %s\n", article.id, article.title,article.regDate);
+					System.out.printf("%d번 / %s\n",articles[i].id,articles[i].title);
+					
 				}
+				
 			} else if (command.startsWith("article detail ")) {
 				int inputedId = Integer.parseInt(command.split(" ")[2]);
 				System.out.println("== 게시물 상세 ==");
