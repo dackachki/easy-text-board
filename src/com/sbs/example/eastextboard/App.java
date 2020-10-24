@@ -28,9 +28,7 @@ public class App {
 	}
 
 	private int add(String title, String body) {
-		// 만약에 현재 꽉 차 있다면
-		// 새 업체과 계약한다.
-
+		
 		if (isArticlesFull()) {
 
 			Article[] newArticles = new Article[articles.length * 2];
@@ -110,18 +108,30 @@ public class App {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
-				int itemsInPage =10;
-				int StartNum = articles.length -1;
-				StartNum -= (pagenum-1) *itemsInPage;
-				int EndNum =StartNum - itemsInPage;
-				
-				for(int i = StartNum; i >=EndNum+1; i--) {
-					Article article = articles[i];
-					System.out.printf("%d번 / %s\n",articles[i].id,articles[i].title);
-					
+				if(pagenum <= 1) {
+					pagenum = 1;
 				}
 				
-			} else if (command.startsWith("article detail ")) {
+				int itemsInPage =10;
+				int StartNum = articlesSize()-1;
+				StartNum -= (pagenum-1) *itemsInPage;
+				int EndNum =StartNum - itemsInPage -1;
+				
+				if (EndNum < 0) {
+					EndNum = 0;
+				}
+				if (StartNum < 0) {
+					System.out.printf("%d번 페이지는 존재하지 않습니다.",pagenum);
+				}
+				for(int i = StartNum; i >=EndNum; i--) {
+					Article article = articles[i];
+					System.out.printf("%d번 / %s\n",article.id,article.title);
+					
+				}
+				continue;
+				
+			} 
+			else if (command.startsWith("article detail ")) {
 				int inputedId = Integer.parseInt(command.split(" ")[2]);
 				System.out.println("== 게시물 상세 ==");
 
