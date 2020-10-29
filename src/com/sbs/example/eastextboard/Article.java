@@ -9,18 +9,6 @@ public class Article {
 	public String body;
 	public String regDate;
 	
-	Article(int id,String title,String body){
-		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		this.id = id;
-		this.title = title;
-		this.body = body;
-		this.regDate = format1.format(new Date());
-	}
-
-	@Override
-	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", body=" + body + ", regDate=" + regDate + "]";
-	}
 	
-
+	
 }

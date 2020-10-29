@@ -6,11 +6,6 @@ public class Member {
 	public String id;
 	public String password;
 	
-	Member(int index,String name,String id,String password){
-		this.index = index;
-		this.name = name;
-		this.id = id;
-		this.password = password;
-	}
+	
 	
 }
