@@ -1,9 +1,12 @@
 package com.sbs.example.eastextboard.Controller;
 
 import java.text.SimpleDateFormat;
+
+import com.sbs.example.eastextboard.Container.Container;
+import com.sbs.example.eastextboard.dto.Article;
 import java.util.*;
 
-import com.sbs.example.eastextboard.Article;
+
 
 public class ArticleController extends Controller {
 	private List<Article> articles;
@@ -33,6 +36,7 @@ public class ArticleController extends Controller {
 	public void run(Scanner sc, String command) {
 
 		if (command.equals("article add")) {
+			if (Container.session.isLogined()){
 			System.out.println("== 게시물 생성 ==");
 			System.out.printf("제목 입력 : ");
 			String title = sc.nextLine();
@@ -41,7 +45,12 @@ public class ArticleController extends Controller {
 			int id = add(title, body);
 			System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
-		} 
+		}
+			else if(Container.session.isLogined() ==false) {
+				System.out.println("회원만 게시물을 작성할 수 있습니다.");
+				return;
+			}
+		}
 			else if (command.startsWith("article list")) {
 
 			int page = Integer.parseInt(command.split(" ")[2]);

@@ -1,10 +1,12 @@
 package com.sbs.example.eastextboard.Controller;
-
+import com.sbs.example.eastextboard.dto.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.sbs.example.eastextboard.Member;
+
+import com.sbs.example.eastextboard.Container.Container;
+import com.sbs.example.eastextboard.Session.Session;
 
 public class MemberController extends Controller {
 
@@ -17,9 +19,12 @@ public class MemberController extends Controller {
 	public MemberController() {
 		member_index = 0;
 		members = new ArrayList<>();
+		for (int i = 1; i <= 3; i++) {
+			join("user" + i, "user" + i, "유저" + i);
+		}
 	}
 
-	private int join(String regid, String name, String password) {
+	private int join(String regid, String password, String name) {
 
 		Member member = new Member();
 
@@ -36,6 +41,7 @@ public class MemberController extends Controller {
 	}
 
 	public void run(Scanner sc, String command) {
+		
 		if (command.equals("member reg")) {
 
 			System.out.println("== 회원가입 ==");
@@ -45,7 +51,7 @@ public class MemberController extends Controller {
 			String name;
 			int regTryC = 0;
 			int regMaxC = 3;
-			boolean idpass = false;
+			
 			while (true) {
 				if (regTryC >= regMaxC) {
 					System.out.println("잠시 후 다시 시도하세요");
@@ -98,7 +104,7 @@ public class MemberController extends Controller {
 			while (true) {
 				if (currentname != "") {
 					System.out.println("로그인중인 아이디가 있습니다.");
-					break;
+					return;
 				}
 				System.out.printf("로그인아이디를 입력하세요 : ");
 				loginId = sc.nextLine().trim();
@@ -155,20 +161,25 @@ public class MemberController extends Controller {
 							System.out.printf("%s님 환영합니다.\n", lookingf);
 							currentid = members.get(i).id;
 							currentname = members.get(i).name;
+							Container.session.loginedMemberId = members.get(i).index;
+
 
 						}
-
-						if (loginpswdMatched == false) {
-
-							System.out.println("비밀번호가 맞지 않습니다.");
-							loginpswdTryCount++;
-						}
-
 						if (loginpswdTryCount >= loginpswdMaxTryCount) {
 							System.out.printf("비밀번호가 %d회 틀렸습니다.확인 후 다시 시도하세요", loginpswdMaxTryCount);
 							break;
 						}
 
+
+						if (!passwd.equals(checkpw)) {
+
+							System.out.println("비밀번호가 맞지 않습니다.");
+							loginpswdTryCount +=1;
+							System.out.printf("%d\n",loginpswdTryCount);
+							
+						}
+
+						
 					}
 				}
 				if (loginpswdMatched) {
@@ -179,16 +190,30 @@ public class MemberController extends Controller {
 		}
 
 		else if (command.equals("member whoami")) {
+			if(Container.session.isLogined()) {
 			System.out.println("== 현재 사용자 정보 ==");
 			System.out.printf("사용자 이름 :%s\n", currentname);
 			System.out.printf("사용자 ID : %s\n", currentid);
-
+			}
+			else if (Container.session.isLogined() == false) {
+				System.out.println("로그인 후 다시 이용하세요");
+				return;
+			}
 		} else if (command.equals("member logout")) {
+			if(Container.session.isLogined()) {
 			System.out.printf("%s님 로그아웃 되었습니다.\n", currentid);
 			currentid = "";
 			currentname = "";
+			Container.session.loginedMemberId = 0;
+				
+			}
+			else if(Container.session.isLogined() == false) {
+				System.out.println("로그인된 사용자가 없습니다.");
+				return;
+			}
 		}
-	}
+		}
+	
 
 	private boolean validid(String loginId) {
 		for(Member member : members) {
