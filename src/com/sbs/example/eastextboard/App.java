@@ -12,7 +12,7 @@ public class App {
 	public void run() {
 		Scanner sc = new Scanner(System.in);
 		
-
+		
 		MemberController memberController = new MemberController();
 		ArticleController articleController = new ArticleController();
 		

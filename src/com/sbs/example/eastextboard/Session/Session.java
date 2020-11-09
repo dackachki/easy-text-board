@@ -1,5 +1,6 @@
 package com.sbs.example.eastextboard.Session;
 
+import com.sbs.example.eastextboard.dto.Board;
 
 public class Session {
 
@@ -11,6 +12,7 @@ public int loginedMemberId;
 	
 	public int writerindex;
 	public String writerid;
-	
+	public Board presentBoard;
+	 
 	
 }

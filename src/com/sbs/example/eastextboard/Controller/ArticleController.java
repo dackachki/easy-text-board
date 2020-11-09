@@ -21,7 +21,18 @@ public class ArticleController extends Controller {
 	public void run(Scanner sc, String command) {
 
 		if (command.equals("article add")) {
-			if (Container.session.isLogined()) {
+			
+			 	if (Container.session.isLogined() == false) {
+				System.out.println("회원만 게시물을 작성할 수 있습니다.");
+				return;
+			}
+			else if(Container.session.presentBoard == null) {
+				System.out.println("게시판을 선택한 후 다시 시도하세요.");
+				return;
+				
+			}
+
+			else if (Container.session.isLogined()) {
 				System.out.println("== 게시물 생성 ==");
 				System.out.printf("제목 입력 : ");
 				String title = sc.nextLine();
@@ -30,11 +41,33 @@ public class ArticleController extends Controller {
 				int id = articleService.add(Container.session.writerindex, title, body);
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
-			} else if (Container.session.isLogined() == false) {
-				System.out.println("회원만 게시물을 작성할 수 있습니다.");
+			} 			
+		}
+		else if(command.equals("article makeboard")) {
+			System.out.println("== 게시판 생성 == ");
+				
+				System.out.println("생성할 게시판 이름 :");
+				String boardName = sc.nextLine();
+			articleService.makeBoard(boardName);
+			System.out.printf("%s 게시판이 생성되었습니다.\n",boardName);
+			
+				
+			}
+		else if (command.equals("article boardselect")){
+			System.out.printf("게시물을 작성할 게시판 입력 : ");
+			String inputname = sc.nextLine();
+			articleService.getBoardName(inputname);
+			if(inputname == null) {
+				System.out.println("해당되는 게시판이 존재하지 않습니다.");
 				return;
 			}
-		} else if (command.startsWith("article list")) {
+			System.out.printf("%s 게시판으로 선택되었습니다\n.",inputname);
+				
+			}
+			
+		
+		
+		else if (command.startsWith("article list")) {
 
 			int page = Integer.parseInt(command.split(" ")[2]);
 			if (page == 0) {
@@ -58,8 +91,10 @@ public class ArticleController extends Controller {
 
 			}
 			for (int i = start; i < end; i++) {
-				System.out.printf("%d  / %s  / %s  / %s  / %s  \n", articleService.getarticles().get(i).id, articleService.getarticles().get(i).title,
-						articleService.getarticles().get(i).body, articleService.getarticles().get(i).date,articleService.getarticles().get(i).writer);
+				System.out.printf("%d  / %s  / %s  / %s  / %s / %s \n", articleService.getarticles().get(i).id,
+						articleService.getarticles().get(i).title, articleService.getarticles().get(i).body,
+						articleService.getarticles().get(i).date, articleService.getarticles().get(i).writer,
+						articleService.getarticles().get(i).belongingBoard);
 
 			}
 		} else if (command.startsWith("article detail")) {
@@ -149,8 +184,8 @@ public class ArticleController extends Controller {
 			System.out.println("번호  /  제목  /내용");
 			for (int i = start; i < end; i++) {
 				int index = ids.get(i);
-				System.out.printf("%d  / %s /  %s\n", articleService.getarticles().get(index).id, articleService.getarticles().get(index).title,
-						articleService.getarticles().get(index).body);
+				System.out.printf("%d  / %s /  %s\n", articleService.getarticles().get(index).id,
+						articleService.getarticles().get(index).title, articleService.getarticles().get(index).body);
 			}
 
 		}

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 import com.sbs.example.eastextboard.dto.Member;
 
 public class MemberDAO {
@@ -16,10 +15,10 @@ public class MemberDAO {
 	public static String currentid = "";
 	public static String currentname = "";
 	public static int logined_member_index = 0;
-	
+
 	public static List<Member> getMembers() {
 		return members;
-	}	
+	}
 
 	public MemberDAO() {
 		member_index = 0;
@@ -28,6 +27,7 @@ public class MemberDAO {
 			join("user" + i, "user" + i, "유저" + i);
 		}
 	}
+
 	public int join(String regid, String password, String name) {
 
 		Member member = new Member();
@@ -44,24 +44,17 @@ public class MemberDAO {
 
 		return member.index;
 	}
+
 	public int getSize() {
 		return members.size();
 	}
-	
-	
+
 	public boolean validid(String loginId) {
-	for (Member member : getMembers()) {
-		if (member.id.equals(loginId)) {
-			return false;
+		for (Member member : getMembers()) {
+			if (member.id.equals(loginId)) {
+				return false;
+			}
 		}
+		return true;
 	}
-	return true;
 }
-}
-	
-
-
-
-	
-
-

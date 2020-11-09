@@ -11,7 +11,8 @@ public class Article {
 	public String body;
 	public String writer;
 	public String date;
-	public int memberindex;	
+	public int memberindex;
+	public int belongingBoard;	
 
 	
 }
